@@ -26,4 +26,9 @@
         <item name="android:statusBarColor">@android:color/black</item>
     </style>
 
+    <style name="ShapeAppearanceOverlay.Button.Rounded" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
 </resources>

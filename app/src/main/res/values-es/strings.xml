@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="zdc_cancel">Cancelar</string>
+    <string name="zdc_auto">Auto</string>
+    <string name="zdc_manual">Manual</string>
+    <string name="zdc_skip">Saltar</string>
+    <string name="zdc_now_you_can_scan_qr_codes">Ahora puedes escanear códigos QR</string>
+</resources>

@@ -4,4 +4,6 @@
     <string name="zdc_cancel">Cancel</string>
     <string name="zdc_auto">Auto</string>
     <string name="zdc_manual">Manual</string>
+    <string name="zdc_skip">Skip</string>
+    <string name="zdc_now_you_can_scan_qr_codes">Now you can scan QR Codes</string>
 </resources>

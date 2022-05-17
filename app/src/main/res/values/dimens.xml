@@ -12,6 +12,7 @@
     <dimen name="zdc_next_arrow_padding">80dp</dimen>
     <dimen name="zdc_xxx_big_padding">40dp</dimen>
     <dimen name="zdc_medium_padding">20dp</dimen>
+    <dimen name="zdc_small_medium_padding">16dp</dimen>
     <dimen name="zdc_gallery_padding">30dp</dimen>
     <dimen name="zdc_small_padding">12dp</dimen>
     <dimen name="zdc_x_small_padding">10dp</dimen>

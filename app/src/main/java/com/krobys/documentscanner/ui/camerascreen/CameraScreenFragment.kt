@@ -33,6 +33,7 @@ import android.view.ViewGroup
 import com.tbruyelle.rxpermissions3.RxPermissions
 import com.krobys.documentscanner.R
 import com.krobys.documentscanner.common.extensions.hide
+import com.krobys.documentscanner.common.extensions.setThrottledOnClickListener
 import com.krobys.documentscanner.common.extensions.show
 import com.krobys.documentscanner.common.utils.FileUriUtils
 import com.krobys.documentscanner.manager.SessionManager
@@ -40,11 +41,13 @@ import com.krobys.documentscanner.model.DocumentScannerErrorModel
 import com.krobys.documentscanner.ui.base.BaseFragment
 import com.krobys.documentscanner.ui.components.scansurface.ScanSurfaceListener
 import com.krobys.documentscanner.ui.scan.InternalScanActivity
+import com.krobys.documentscanner.ui.scan.InternalScanActivity.Companion.EXTRA_IS_ALLOW_SKIP
+import com.krobys.documentscanner.ui.scan.InternalScanActivity.Companion.EXTRA_IS_SHOW_ALBUM
+import com.krobys.documentscanner.ui.scan.InternalScanActivity.Companion.EXTRA_SCAN_QR_CODE
 import id.zelory.compressor.determineImageRotation
 import kotlinx.android.synthetic.main.fragment_camera_screen.*
 import java.io.File
 import java.io.FileNotFoundException
-
 
 internal class CameraScreenFragment: BaseFragment(), ScanSurfaceListener  {
 
@@ -52,8 +55,14 @@ internal class CameraScreenFragment: BaseFragment(), ScanSurfaceListener  {
         private const val GALLERY_REQUEST_CODE = 878
         private val TAG = CameraScreenFragment::class.simpleName
 
-        fun newInstance(): CameraScreenFragment {
-            return CameraScreenFragment()
+        fun newInstance(canSkip: Boolean, canOpenGallery: Boolean, canScanQr: Boolean): CameraScreenFragment {
+            return CameraScreenFragment().apply {
+                arguments = Bundle().apply {
+                    putBoolean(EXTRA_IS_ALLOW_SKIP, canSkip)
+                    putBoolean(EXTRA_IS_SHOW_ALBUM, canOpenGallery)
+                    putBoolean(EXTRA_SCAN_QR_CODE, canScanQr)
+                }
+            }
         }
     }
 
@@ -73,7 +82,10 @@ internal class CameraScreenFragment: BaseFragment(), ScanSurfaceListener  {
 
         // settings
         val sessionManager = SessionManager(getScanActivity())
-        galleryButton.visibility = if (sessionManager.isGalleryEnabled()) View.VISIBLE else View.GONE
+        skipButton.visibility = if (requireArguments().getBoolean(EXTRA_IS_ALLOW_SKIP, false)) View.VISIBLE else View.GONE
+        galleryButton.visibility = if (sessionManager.isGalleryEnabled() && requireArguments().getBoolean(EXTRA_IS_SHOW_ALBUM, false)) View.VISIBLE else View.GONE
+        tvScanQr.visibility = if (requireArguments().getBoolean(EXTRA_SCAN_QR_CODE, false)) View.VISIBLE else View.GONE
+        fabScanCode.visibility = if (requireArguments().getBoolean(EXTRA_SCAN_QR_CODE, false)) View.VISIBLE else View.GONE
         autoButton.visibility = if (sessionManager.isCaptureModeButtonEnabled()) View.VISIBLE else View.GONE
         scanSurfaceView.isAutoCaptureOn = sessionManager.isAutoCaptureEnabledByDefault()
         scanSurfaceView.isLiveDetectionOn = sessionManager.isLiveDetectionEnabled()
@@ -93,20 +105,29 @@ internal class CameraScreenFragment: BaseFragment(), ScanSurfaceListener  {
     }
 
     private fun initListeners() {
-        cameraCaptureButton.setOnClickListener {
+        cameraCaptureButton.setThrottledOnClickListener {
             takePhoto()
         }
-        cancelButton.setOnClickListener {
+        cancelButton.setThrottledOnClickListener {
             finishActivity()
         }
-        flashButton.setOnClickListener {
+        flashButton.setThrottledOnClickListener {
             switchFlashState()
         }
-        galleryButton.setOnClickListener {
+        galleryButton.setThrottledOnClickListener {
             checkForStoragePermissions()
         }
-        autoButton.setOnClickListener {
+        autoButton.setThrottledOnClickListener {
             toggleAutoManualButton()
+        }
+        skipButton.setThrottledOnClickListener {
+            onSkip()
+        }
+        tvScanQr.setThrottledOnClickListener {
+            openScanQrActivity()
+        }
+        fabScanCode.setThrottledOnClickListener {
+            openScanQrActivity()
         }
     }
 
@@ -256,6 +277,14 @@ internal class CameraScreenFragment: BaseFragment(), ScanSurfaceListener  {
         if(isAdded) {
             getScanActivity().onError(error)
         }
+    }
+
+    private fun onSkip() {
+        getScanActivity().onSkip()
+    }
+
+    private fun openScanQrActivity() {
+        getScanActivity().onScanQrCode()
     }
 
     override fun showFlashModeOn() {

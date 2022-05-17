@@ -28,3 +28,17 @@ internal fun View.hide() {
 internal fun View.show() {
     visibility = View.VISIBLE
 }
+
+internal fun View.setThrottledOnClickListener(millis: Long = 300, callback: (View) -> Unit) {
+    setOnClickListener(object : View.OnClickListener {
+        private var lastClick = 0L
+
+        override fun onClick(v: View) {
+            val now = System.currentTimeMillis()
+            if (now - lastClick > millis) {
+                callback.invoke(this@setThrottledOnClickListener)
+            }
+            lastClick = now
+        }
+    })
+}

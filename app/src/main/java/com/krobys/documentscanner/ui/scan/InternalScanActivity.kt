@@ -53,6 +53,8 @@ abstract class InternalScanActivity : AppCompatActivity() {
     abstract fun onError(error: DocumentScannerErrorModel)
     abstract fun onSuccess(scannerResults: ScannerResults)
     abstract fun onClose()
+    abstract fun onSkip()
+    abstract fun onScanQrCode()
 
     companion object {
         private val TAG = InternalScanActivity::class.simpleName
@@ -63,6 +65,12 @@ abstract class InternalScanActivity : AppCompatActivity() {
         internal const val CROPPED_IMAGE_NAME = "cropped"
         internal const val TRANSFORMED_IMAGE_NAME = "transformed"
         internal const val NOT_INITIALIZED = -1L
+        internal const val EXTRA_IS_SHOW_ALBUM = "EXTRA_IS_SHOW_ALBUM"
+        internal const val EXTRA_IS_ALLOW_SKIP = "EXTRA_IS_ALLOW_SKIP"
+        internal const val EXTRA_RESULT_SKIP = "EXTRA_RESULT_SKIP"
+        internal const val EXTRA_RESULT_FROM_PHOTO = "EXTRA_RESULT_FROM_PHOTO"
+        internal const val EXTRA_RESULT_FROM_QR_CODE = "EXTRA_RESULT_FROM_QR_CODE"
+        internal const val EXTRA_SCAN_QR_CODE = "EXTRA_SCAN_QR_CODE"
     }
 
     internal lateinit var originalImageFile: File
@@ -88,7 +96,11 @@ abstract class InternalScanActivity : AppCompatActivity() {
     }
 
     private fun showCameraScreen() {
-        val cameraScreenFragment = CameraScreenFragment.newInstance()
+        val cameraScreenFragment = CameraScreenFragment.newInstance(
+            intent.getBooleanExtra(EXTRA_IS_ALLOW_SKIP, false),
+            intent.getBooleanExtra(EXTRA_IS_SHOW_ALBUM, false),
+            intent.getBooleanExtra(EXTRA_SCAN_QR_CODE, false)
+        )
         addFragmentToBackStack(cameraScreenFragment, CAMERA_SCREEN_FRAGMENT_TAG)
     }
 

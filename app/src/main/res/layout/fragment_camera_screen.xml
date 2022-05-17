@@ -2,6 +2,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <com.krobys.documentscanner.ui.components.scansurface.ScanSurfaceView
@@ -34,10 +36,24 @@
                 style="@style/ZdcTextView14sp.White"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
+                android:layout_toStartOf="@+id/skipButton"
+                android:layout_alignWithParentIfMissing="true"
                 android:layout_centerVertical="true"
                 android:padding="@dimen/zdc_x_small_padding"
                 android:text="@string/zdc_auto" />
+
+            <TextView
+                android:id="@+id/skipButton"
+                style="@style/ZdcTextView14sp.White"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/zdc_small_medium_padding"
+                android:padding="@dimen/zdc_x_small_padding"
+                android:visibility="gone"
+                android:text="@string/zdc_skip"
+                tools:visibility="visible" />
 
         </RelativeLayout>
 
@@ -50,7 +66,9 @@
             android:layout_centerHorizontal="true"
             android:layout_marginEnd="@dimen/zdc_medium_padding"
             android:layout_marginBottom="@dimen/zdc_gallery_padding"
-            android:src="@drawable/zdc_gallery_icon" />
+            android:visibility="gone"
+            android:src="@drawable/zdc_gallery_icon"
+            tools:visibility="visible" />
 
         <View
             android:id="@+id/cameraCaptureButton"
@@ -74,6 +92,36 @@
             android:gravity="center"
             android:padding="@dimen/zdc_x_small_padding"
             android:text="@string/zdc_cancel" />
+
+        <TextView
+            android:id="@+id/tvScanQr"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/zdc_image_view_icons_dimens"
+            android:layout_alignTop="@+id/fabScanCode"
+            android:layout_alignBottom="@+id/fabScanCode"
+            android:layout_marginEnd="@dimen/zdc_small_medium_padding"
+            android:layout_toStartOf="@+id/fabScanCode"
+            android:background="@color/zdc_white_transparent"
+            android:gravity="center"
+            android:paddingHorizontal="@dimen/zdc_small_padding"
+            android:text="@string/zdc_now_you_can_scan_qr_codes"
+            android:textColor="@color/cardview_dark_background"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabScanCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_marginEnd="@dimen/zdc_xx_small_padding"
+            android:layout_marginBottom="@dimen/zdc_xx_small_padding"
+            android:src="@drawable/ic_qr_code_scanner"
+            android:visibility="gone"
+            android:layout_above="@+id/cameraCaptureButton"
+            android:layout_alignParentEnd="true"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.Button.Rounded"
+            tools:visibility="visible" />
 
         <com.krobys.documentscanner.ui.components.ProgressView
             android:id="@+id/progressLayout"
