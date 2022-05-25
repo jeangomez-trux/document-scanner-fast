@@ -39,6 +39,7 @@ import com.krobys.documentscanner.common.utils.OpenCvNativeBridge
 import com.krobys.documentscanner.model.DocumentScannerErrorModel
 import com.krobys.documentscanner.ui.base.BaseFragment
 import com.krobys.documentscanner.ui.scan.InternalScanActivity
+import com.krobys.documentscanner.ui.scan.InternalScanActivity.Companion.EXTRA_SHOW_ENHANCED_VIEW
 import id.zelory.compressor.determineImageRotation
 import kotlinx.android.synthetic.main.fragment_image_crop.*
 import java.io.File
@@ -49,8 +50,12 @@ internal class ImageCropFragment : BaseFragment() {
     companion object {
         private val TAG = ImageCropFragment::class.simpleName
 
-        fun newInstance(): ImageCropFragment {
-            return ImageCropFragment()
+        fun newInstance(showEnhancedView: Boolean): ImageCropFragment {
+            return ImageCropFragment().apply {
+                arguments = Bundle().apply {
+                    putBoolean(EXTRA_SHOW_ENHANCED_VIEW, showEnhancedView)
+                }
+            }
         }
     }
 
@@ -158,7 +163,11 @@ internal class ImageCropFragment : BaseFragment() {
     }
 
     private fun startImageProcessingFragment() {
-        getScanActivity().showImageProcessingFragment()
+        if (requireArguments().getBoolean(EXTRA_SHOW_ENHANCED_VIEW, false)) {
+            getScanActivity().showImageProcessingFragment()
+        } else {
+            getScanActivity().finalScannerResult()
+        }
     }
 
     private fun closeFragment() {

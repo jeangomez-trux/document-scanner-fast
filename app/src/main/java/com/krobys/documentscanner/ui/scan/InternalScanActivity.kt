@@ -71,6 +71,7 @@ abstract class InternalScanActivity : AppCompatActivity() {
         internal const val EXTRA_RESULT_FROM_PHOTO = "EXTRA_RESULT_FROM_PHOTO"
         internal const val EXTRA_RESULT_FROM_QR_CODE = "EXTRA_RESULT_FROM_QR_CODE"
         internal const val EXTRA_SCAN_QR_CODE = "EXTRA_SCAN_QR_CODE"
+        internal const val EXTRA_SHOW_ENHANCED_VIEW = "EXTRA_SHOW_ENHANCED_VIEW"
     }
 
     internal lateinit var originalImageFile: File
@@ -105,7 +106,9 @@ abstract class InternalScanActivity : AppCompatActivity() {
     }
 
     internal fun showImageCropFragment() {
-        val imageCropFragment = ImageCropFragment.newInstance()
+        val imageCropFragment = ImageCropFragment.newInstance(
+            intent.getBooleanExtra(EXTRA_SHOW_ENHANCED_VIEW, false)
+        )
         addFragmentToBackStack(imageCropFragment, IMAGE_CROP_FRAGMENT_TAG)
     }
 
