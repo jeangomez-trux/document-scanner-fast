@@ -72,6 +72,8 @@ abstract class InternalScanActivity : AppCompatActivity() {
         internal const val EXTRA_RESULT_FROM_QR_CODE = "EXTRA_RESULT_FROM_QR_CODE"
         internal const val EXTRA_SCAN_QR_CODE = "EXTRA_SCAN_QR_CODE"
         internal const val EXTRA_SHOW_ENHANCED_VIEW = "EXTRA_SHOW_ENHANCED_VIEW"
+        private const val EXPECTED_SIZE_IN_MB = 2
+        private const val EXPECTED_SIZE_IN_BYTES = 1024 * 1024 * EXPECTED_SIZE_IN_MB
     }
 
     internal lateinit var originalImageFile: File
@@ -147,11 +149,13 @@ abstract class InternalScanActivity : AppCompatActivity() {
                         saveBitmap(it, transformedImageFile!!, imageType, imageQuality)
                     }
                     transformedImageFile = transformedImageFile?.let {
-                        Compressor.compress(this@InternalScanActivity, it) {
-                            quality(imageQuality)
-                            if (imageSize != NOT_INITIALIZED) size(imageSize)
-                            format(imageType)
-                        }
+                        if (it.length() > EXPECTED_SIZE_IN_BYTES) {
+                            Compressor.compress(this@InternalScanActivity, it) {
+                                quality(imageQuality)
+                                if (imageSize != NOT_INITIALIZED) size(imageSize)
+                                format(imageType)
+                            }
+                        } else it
                     }
                     transformedImageFile
                 }
@@ -163,22 +167,26 @@ abstract class InternalScanActivity : AppCompatActivity() {
                         saveBitmap(it, croppedImageFile!!, imageType, imageQuality)
                     }
                     croppedImageFile = croppedImageFile?.let {
-                        Compressor.compress(this@InternalScanActivity, it) {
-                            quality(imageQuality)
-                            if (imageSize != NOT_INITIALIZED) size(imageSize)
-                            format(imageType)
-                        }
+                        if (it.length() > EXPECTED_SIZE_IN_BYTES) {
+                            Compressor.compress(this@InternalScanActivity, it) {
+                                quality(imageQuality)
+                                if (imageSize != NOT_INITIALIZED) size(imageSize)
+                                format(imageType)
+                            }
+                        } else it
                     }
                     croppedImageFile
                 }
                 else -> {
-                    originalImageFile =
-                        Compressor.compress(this@InternalScanActivity, originalImageFile) {
-                            quality(imageQuality)
-                            if (imageSize != NOT_INITIALIZED) size(imageSize)
-                            format(imageType)
-                        }
-                    originalImageFile
+                    if (originalImageFile.length() > EXPECTED_SIZE_IN_BYTES) {
+                        originalImageFile =
+                            Compressor.compress(this@InternalScanActivity, originalImageFile) {
+                                quality(imageQuality)
+                                if (imageSize != NOT_INITIALIZED) size(imageSize)
+                                format(imageType)
+                            }
+                        originalImageFile
+                    } else originalImageFile
                 }
             }
 
