@@ -63,7 +63,7 @@ internal class PolygonView @JvmOverloads constructor(
         addView(pointer3)
         addView(pointer4)
 
-        paint.color = ContextCompat.getColor(context, android.R.color.white)
+        paint.color = ContextCompat.getColor(context, R.color.zdc_white_transparent)
         paint.strokeWidth = context.resources.getDimension(R.dimen.zdc_polygon_line_stroke_width)
         paint.isAntiAlias = true
     }

@@ -46,7 +46,7 @@ internal class OpenCvNativeBridge {
         private const val NORMALIZATION_MAX_VALUE = 255.0
         private const val BLURRING_KERNEL_SIZE = 5.0
         private const val DOWNSCALE_IMAGE_SIZE = 600.0
-        private const val FIRST_MAX_CONTOURS = 10
+        private const val FIRST_MAX_CONTOURS = 4
     }
 
     fun getScannedBitmap(bitmap: Bitmap, x1: Float, y1: Float, x2: Float, y2: Float, x3: Float, y3: Float, x4: Float, y4: Float): Bitmap {
