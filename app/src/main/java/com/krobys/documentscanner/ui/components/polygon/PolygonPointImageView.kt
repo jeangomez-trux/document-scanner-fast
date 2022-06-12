@@ -73,7 +73,7 @@ internal class PolygonPointImageView @JvmOverloads constructor(
         super.performClick()
 
         val color = if (polygonView?.isValidShape(polygonView.getPoints()) == true) {
-            ContextCompat.getColor(context, android.R.color.white)
+            ContextCompat.getColor(context, R.color.zdc_gray)
         } else {
             ContextCompat.getColor(context, R.color.zdc_red)
         }
